@@ -1154,8 +1154,8 @@ static int8_t nvt_ts_check_chip_ver_trim(void)
 #endif
 	nvt_bootloader_reset(); /* NOT in retry loop*/
 
-	//---Check for 5 times---
-	for (retry = 5; retry > 0; retry--) {
+	//---Check for 2 times---
+	for (retry = 2; retry > 0; retry--) {
 		nvt_sw_reset_idle();
 
 		buf[0] = 0x00;
