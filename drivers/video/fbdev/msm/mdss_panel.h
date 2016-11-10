@@ -814,6 +814,7 @@ struct mdss_panel_info {
 	u32 disp_on_check_val;
 
 	struct panel_param *param[PARAM_ID_NUM];
+	bool hbm_restore;
 };
 
 struct mdss_panel_timing {
