@@ -295,6 +295,12 @@ struct smb_iio {
 	struct iio_channel	*connector_temp_thr3_chan;
 };
 
+struct mmi_params {
+	int			usb_system_temp_level;
+	int			usb_thermal_levels;
+	int			*usb_thermal_mitigation;
+};
+
 struct smb_charger {
 	struct device		*dev;
 	char			*name;
@@ -446,6 +452,10 @@ struct smb_charger {
 	u32			headroom_mode;
 	bool			flash_init_done;
 	bool			flash_active;
+
+	/* mmi based params */
+	/* Place at end of struct smb_charger as it grows */
+	struct mmi_params	mmi;
 };
 
 int smblib_read(struct smb_charger *chg, u16 addr, u8 *val);
@@ -605,4 +615,12 @@ int smblib_icl_override(struct smb_charger *chg, bool override);
 
 int smblib_init(struct smb_charger *chg);
 int smblib_deinit(struct smb_charger *chg);
+
+void mmi_init(struct smb_charger *chg);
+void mmi_deinit(struct smb_charger *chg);
+
+int smblib_get_prop_usb_system_temp_level(struct smb_charger *chg,
+					  union power_supply_propval *val);
+int smblib_set_prop_usb_system_temp_level(struct smb_charger *chg,
+				const union power_supply_propval *val);
 #endif /* __SMB5_CHARGER_H */
