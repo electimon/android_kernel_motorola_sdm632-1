@@ -343,6 +343,7 @@ struct mmi_params {
 	struct wakeup_source	smblib_mmi_hb_wake_source;
 	int			charger_debounce_cnt;
 	bool			apsd_done;
+	int			charger_rate;
 };
 
 struct smb_charger {
@@ -662,6 +663,7 @@ int smblib_deinit(struct smb_charger *chg);
 
 void mmi_init(struct smb_charger *chg);
 void mmi_deinit(struct smb_charger *chg);
+void mmi_chrg_rate_check(struct smb_charger *chip);
 
 int smblib_get_prop_usb_system_temp_level(struct smb_charger *chg,
 					  union power_supply_propval *val);
