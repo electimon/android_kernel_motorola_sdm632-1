@@ -1377,8 +1377,7 @@ static int smb5_batt_get_prop(struct power_supply *psy,
 				POWER_SUPPLY_PROP_VOLTAGE_NOW, val);
 		break;
 	case POWER_SUPPLY_PROP_VOLTAGE_MAX:
-		val->intval = get_client_vote(chg->fv_votable,
-				BATT_PROFILE_VOTER);
+		val->intval = get_effective_result(chg->fv_votable);
 		break;
 	case POWER_SUPPLY_PROP_CURRENT_NOW:
 		rc = smblib_get_prop_from_bms(chg,
@@ -1387,8 +1386,7 @@ static int smb5_batt_get_prop(struct power_supply *psy,
 			val->intval *= (-1);
 		break;
 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
-		val->intval = get_client_vote(chg->fcc_votable,
-					      BATT_PROFILE_VOTER);
+		val->intval = get_effective_result(chg->fcc_votable);
 		break;
 	case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
 		rc = smb5_get_prop_batt_iterm(chg, val);
@@ -2983,6 +2981,10 @@ static int smb5_probe(struct platform_device *pdev)
 	}
 
 	device_init_wakeup(chg->dev, true);
+
+	schedule_delayed_work(&chg->mmi.heartbeat_work,
+			      msecs_to_jiffies(0));
+	atomic_set(&chg->mmi.hb_ready, 1);
 
 	pr_info("QPNP SMB5 probed successfully\n");
 
