@@ -7,9 +7,9 @@ endif
 # to be runtime added by the bootloader (i.e. /chosen properties)
 DTC_FLAGS += -p 1024
 
-dtbo-$(CONFIG_ARCH_SDM632) += sdm632-river-evt-overlay.dtbo
+dtbo-$(CONFIG_RIVER_DTB) += sdm632-river-evt-overlay.dtbo
 
-dtbo-$(CONFIG_ARCH_SDM632) += \
+dtbo-$(CONFIG_OCEAN_DTB) += \
 	sdm632-ocean-na-evt1-overlay.dtbo \
 	sdm632-ocean-row-evt1-overlay.dtbo
 
