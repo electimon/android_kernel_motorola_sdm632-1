@@ -5320,11 +5320,12 @@ void mmi_init(struct smb_charger *chg)
 	if (rc < 0)
 		pr_err("Error getting mmi dt items\n");
 
+	chg->mmi.init_done = true;
 }
 
 void mmi_deinit(struct smb_charger *chg)
 {
-	if (!chg)
+	if (!chg || !chg->mmi.init_done)
 		return;
 
 	wakeup_source_trash(&chg->mmi.smblib_mmi_hb_wake_source);
