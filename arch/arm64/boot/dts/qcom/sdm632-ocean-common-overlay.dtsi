@@ -137,3 +137,7 @@
 		pinctrl-1 = <&ldo_en_suspend &int_suspend>;
 	};
 };
+
+&sdhc_2 {
+	cd-gpios = <&tlmm 133 0x0>;
+};
