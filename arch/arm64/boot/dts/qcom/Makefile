@@ -13,6 +13,8 @@ dtbo-$(CONFIG_OCEAN_DTB) += \
 	sdm632-ocean-na-evt1-overlay.dtbo \
 	sdm632-ocean-row-evt1-overlay.dtbo
 
+dtbo-$(CONFIG_CHANNEL_DTB) += sdm632-channel-evt-overlay.dtbo
+
 sdm632-river-evt-overlay.dtbo-base := \
        sdm632-river-base.dtb
 
@@ -20,6 +22,8 @@ sdm632-ocean-na-evt1-overlay.dtbo-base := \
        sdm632-ocean-base.dtb
 sdm632-ocean-row-evt1-overlay.dtbo-base := \
        sdm632-ocean-base.dtb
+
+sdm632-channel-evt-overlay.dtbo-base := sdm632-channel-base.dtb
 
 else
 dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc.dtb msm8916-mtp.dtb
