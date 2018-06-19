@@ -5095,7 +5095,10 @@ static void mmi_heartbeat_work(struct work_struct *work)
 	switch (mmi->pres_chrg_step) {
 	case STEP_FLOAT:
 	case STEP_MAX:
-		target_fv = zone->norm_mv;
+		if (!zone->norm_mv)
+			target_fv = max_fv_mv;
+		else
+			target_fv = zone->norm_mv;
 		target_fcc = zone->fcc_max_ma;
 		target_usb = cl_usb;
 		break;
