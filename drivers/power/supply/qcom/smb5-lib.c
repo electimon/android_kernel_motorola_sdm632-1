@@ -5327,6 +5327,13 @@ void mmi_init(struct smb_charger *chg)
 	if (rc < 0)
 		pr_err("Error getting mmi dt items\n");
 
+	/* Turn Jeita OFF */
+	rc = smblib_masked_write(chg, JEITA_EN_CFG_REG,
+				 0x3F,
+				 0x00);
+	if (rc)
+		smblib_err(chg, "couldn't set JEITA CFG\n");
+
 	chg->mmi.init_done = true;
 }
 
