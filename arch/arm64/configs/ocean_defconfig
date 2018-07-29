@@ -3608,7 +3608,7 @@ CONFIG_LEDS_TRIGGER_TIMER=y
 #
 # iptables trigger is under Netfilter config (LED target)
 #
-# CONFIG_LEDS_TRIGGER_TRANSIENT is not set
+CONFIG_LEDS_TRIGGER_TRANSIENT=y
 # CONFIG_LEDS_TRIGGER_CAMERA is not set
 # CONFIG_LEDS_TRIGGER_PANIC is not set
 # CONFIG_ACCESSIBILITY is not set
