@@ -1894,6 +1894,7 @@ CONFIG_SENSORS_FPC_1020=y
 # CONFIG_INPUT_EGISTEC_FPS is not set
 # CONFIG_SMI130 is not set
 # CONFIG_RMI4_CORE is not set
+CONFIG_INPUT_ABOV=y
 
 #
 # Hardware I/O ports
