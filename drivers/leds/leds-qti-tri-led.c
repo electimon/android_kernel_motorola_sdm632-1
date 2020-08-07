@@ -54,6 +54,7 @@ struct led_setting {
 	enum led_brightness	brightness;
 	bool			blink;
 	bool			breath;
+	bool			breath_toggle;
 };
 
 struct qpnp_led_dev {
@@ -328,6 +329,9 @@ static ssize_t breath_store(struct device *dev, struct device_attribute *attr,
 	if (led->breathing == breath)
 		goto unlock;
 
+	if (led->led_setting.breath_toggle == 0)
+		goto unlock;
+
 	led->led_setting.blink = false;
 	led->led_setting.breath = breath;
 	led->led_setting.brightness = breath ? LED_FULL : LED_OFF;
@@ -344,6 +348,54 @@ unlock:
 static DEVICE_ATTR(breath, 0644, breath_show, breath_store);
 static const struct attribute *breath_attrs[] = {
 	&dev_attr_breath.attr,
+	NULL
+};
+
+static ssize_t breath_toggle_show(struct device *dev, struct device_attribute *attr,
+							char *buf)
+{
+	struct led_classdev *led_cdev = dev_get_drvdata(dev);
+	struct qpnp_led_dev *led =
+		container_of(led_cdev, struct qpnp_led_dev, cdev);
+
+	return snprintf(buf, PAGE_SIZE, "%d\n", led->led_setting.breath_toggle);
+}
+
+static ssize_t breath_toggle_store(struct device *dev, struct device_attribute *attr,
+						const char *buf, size_t count)
+{
+	int rc;
+	bool breath_toggle;
+	struct led_classdev *led_cdev = dev_get_drvdata(dev);
+	struct qpnp_led_dev *led =
+		container_of(led_cdev, struct qpnp_led_dev, cdev);
+
+	rc = kstrtobool(buf, &breath_toggle);
+	if (rc < 0)
+		return rc;
+
+	mutex_lock(&led->lock);
+	if (led->led_setting.breath == breath_toggle)
+		goto unlock;
+
+	led->led_setting.blink = false;
+	led->led_setting.breath_toggle = breath_toggle;
+        if (breath_toggle == 0)
+		led->led_setting.breath = false;
+	led->led_setting.brightness = 0;
+	rc = qpnp_tri_led_set(led);
+	if (rc < 0)
+		dev_err(led->chip->dev, "Set led failed for %s, rc=%d\n",
+				led->label, rc);
+
+unlock:
+	mutex_unlock(&led->lock);
+	return (rc < 0) ? rc : count;
+}
+
+static DEVICE_ATTR(breath_toggle, 0644, breath_toggle_show, breath_toggle_store);
+static const struct attribute *breath_toggle_attrs[] = {
+	&dev_attr_breath_toggle.attr,
 	NULL
 };
 
@@ -375,6 +427,8 @@ static int qpnp_tri_led_register(struct qpnp_tri_led_chip *chip)
 				& PWM_OUTPUT_MODULATED) {
 			rc = sysfs_create_files(&led->cdev.dev->kobj,
 					breath_attrs);
+			rc = sysfs_create_files(&led->cdev.dev->kobj,
+					breath_toggle_attrs);
 			if (rc < 0) {
 				dev_err(chip->dev, "Create breath file for %s led failed, rc=%d\n",
 						led->label, rc);
@@ -387,9 +441,12 @@ static int qpnp_tri_led_register(struct qpnp_tri_led_chip *chip)
 
 err_out:
 	for (j = 0; j <= i; j++) {
-		if (j < i)
+		if (j < i) {
 			sysfs_remove_files(&chip->leds[j].cdev.dev->kobj,
 					breath_attrs);
+			sysfs_remove_files(&chip->leds[j].cdev.dev->kobj,
+					breath_toggle_attrs);
+		}
 		mutex_destroy(&chip->leds[j].lock);
 	}
 	return rc;
@@ -555,6 +612,7 @@ static int qpnp_tri_led_remove(struct platform_device *pdev)
 	mutex_destroy(&chip->bus_lock);
 	for (i = 0; i < chip->num_leds; i++) {
 		sysfs_remove_files(&chip->leds[i].cdev.dev->kobj, breath_attrs);
+		sysfs_remove_files(&chip->leds[i].cdev.dev->kobj, breath_toggle_attrs);
 		mutex_destroy(&chip->leds[i].lock);
 	}
 	dev_set_drvdata(chip->dev, NULL);
