@@ -5,8 +5,8 @@ export CROSS_COMPILE_ARM32=/srv/root/build/android/halium10/prebuilts/gcc/linux-
 
 if [[ $DEVICE == "ocean" ]];
 then
-make O=out -j24 ocean_defconfig
-make O=out -j24
+make -j24 ocean_defconfig
+make -j24
 cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3Ocean/
 cp out/arch/arm64/boot/dtbo.img AnyKernel3Ocean/
 cd AnyKernel3Ocean
@@ -27,8 +27,8 @@ fi
 
 if [[ $DEVICE == "ginna" ]];
 then
-make O=out -j24 ginna_defconfig
-make O=out -j24
+make -j24 ginna_defconfig
+make -j24
 cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3Ginna/
 cp out/arch/arm64/boot/dtbo.img AnyKernel3Ginna/
 cd AnyKernel3Ginna
