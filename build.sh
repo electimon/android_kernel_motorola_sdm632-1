@@ -1,5 +1,4 @@
 export DEVICE=$1
-export ARCH=arm64
 export CROSS_COMPILE=/srv/root/build/android/rvgR/prebuilts/gcc/linux-x86/aarch64/arm64-gcc/bin/aarch64-elf-
 export CROSS_COMPILE_ARM32=/srv/root/build/android/halium10/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-
 
