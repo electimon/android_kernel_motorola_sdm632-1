@@ -1,48 +1,39 @@
-export DEVICE=$1
+# Setup Variables
 export ARCH=arm64
 export CROSS_COMPILE=/srv/root/build/android/rvgR/prebuilts/gcc/linux-x86/aarch64/arm64-gcc/bin/aarch64-elf-
 export CROSS_COMPILE_ARM32=/srv/root/build/android/halium10/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-
+export DEVICE=$1
+export MAKEFLAGS="O=out -j24"
+cd `dirname $0`
+export KERNDIR=`pwd`
+export AZURREVISION=${KERNDIR: -1}
 
-if [[ $DEVICE == "ocean" ]];
-then
-make O=out -j24 ocean_defconfig
-make O=out -j24
-cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3Ocean/
-cp out/arch/arm64/boot/dtbo.img AnyKernel3Ocean/
-cd AnyKernel3Ocean
-
-misato=n
-
-if [[ misato == "y" ]];
-then
-zip -r9 AzurElectricR5-G7P.zip * -x .git README.md *placeholder
+# Setup revision control
+if [[ -f ${DEVICE}revision ]]; then
+        OLDRE=`cat ${DEVICE}revision`
+	echo ${OLDRE}+1 | bc > ${DEVICE}revision
 else
-zip -r9 a.zip * -x .git README.md *placeholder
+	echo 1 > ${DEVICE}revision
 fi
+export KERNELREVISION=`cat ${DEVICE}revision`
 
-mv *.zip /var/www/html/
+# Generate defconfig
+make ${DEVICE}_defconfig
 
-rm -rf *.zip Image.gz-dtb dtbo.img
-fi
+# Build the kernel!
+# Generate a log file for ez debugging and exit upon error.
+make &>build.log || (echo "Well well well, looks like something went wrong..."; exit 1)
 
-if [[ $DEVICE == "ginna" ]];
-then
-make O=out -j24 ginna_defconfig
-make O=out -j24
-cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3Ginna/
-cp out/arch/arm64/boot/dtbo.img AnyKernel3Ginna/
-cd AnyKernel3Ginna
+# Obtain the goodness
+cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3${DEVICE}
+cp out/arch/arm64/boot/dtbo.img AnyKernel3${DEVICE}
 
-misato=n
+# Zip it up
+cd AnyKernel3${DEVICE}
+zip -r9 AzurElectricR${AZURREVISION}-${DEVICE}-${KERNELREVISION}.zip * -x .git README.md *placeholder
 
-if [[ misato == "y" ]];
-then
-zip -r9 AzurElectricR5-E7.zip * -x .git README.md *placeholder
-else
-zip -r9 a.zip * -x .git README.md *placeholder
-fi
+# Move it for all to see
+mv *.zip /var/www/html/kernels/${DEVICE}/
 
-mv *.zip /var/www/html/
-
-rm -rf *.zip Image.gz-dtb dtbo.img
-fi
+# Cleanup
+rm -rf dtbo.img Image.gz-dtb
