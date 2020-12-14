@@ -118,7 +118,7 @@ void FPS_notify(unsigned long stype, int state)
 
 struct fpc1020_data {
 	struct device *dev;
-#ifdef CONFIG_INPUT_MISC_FPC1020_SAVE_TO_CLASS_DEVICE
+#ifdef CONFIG_SENSORS_FPC_1020_SAVE_TO_CLASS_DEVICE
 	struct device *class_dev;
 #endif
 	struct platform_device *pdev;
@@ -208,7 +208,7 @@ static ssize_t irq_cnt_get(struct device *device,
 }
 static DEVICE_ATTR(irq_cnt, S_IRUSR, irq_cnt_get, NULL);
 
-#ifdef CONFIG_INPUT_MISC_FPC1020_SAVE_TO_CLASS_DEVICE
+#ifdef CONFIG_SENSORS_FPC_1020_SAVE_TO_CLASS_DEVICE
 /* Attribute: vendor (RO) */
 static ssize_t vendor_show(struct device *dev,
 	struct device_attribute *attr, char *buf)
@@ -230,7 +230,7 @@ static struct attribute *attributes[] = {
 	&dev_attr_irq.attr,
 	&dev_attr_irq_cnt.attr,
 	&dev_attr_hw_reset.attr,
-#ifdef CONFIG_INPUT_MISC_FPC1020_SAVE_TO_CLASS_DEVICE
+#ifdef CONFIG_SENSORS_FPC_1020_SAVE_TO_CLASS_DEVICE
 	&dev_attr_vendor.attr,
 	&dev_attr_modalias.attr,
 #endif
@@ -241,7 +241,7 @@ static const struct attribute_group attribute_group = {
 	.attrs = attributes,
 };
 
-#ifdef CONFIG_INPUT_MISC_FPC1020_SAVE_TO_CLASS_DEVICE
+#ifdef CONFIG_SENSORS_FPC_1020_SAVE_TO_CLASS_DEVICE
 static const struct attribute_group *attribute_groups[] = {
 	&attribute_group,
 	NULL
@@ -257,7 +257,7 @@ static irqreturn_t fpc1020_irq_handler(int irq, void *handle)
 	pm_wakeup_event(fpc1020->dev, MAX_UP_TIME);
 	dev_dbg(fpc1020->dev, "%s\n", __func__);
 	fpc1020->irq_cnt++;
-#ifdef CONFIG_INPUT_MISC_FPC1020_SAVE_TO_CLASS_DEVICE
+#ifdef CONFIG_SENSORS_FPC_1020_SAVE_TO_CLASS_DEVICE
 	sysfs_notify(&fpc1020->class_dev->kobj, NULL, dev_attr_irq.attr.name);
 #else
 	sysfs_notify(&fpc1020->dev->kobj, NULL, dev_attr_irq.attr.name);
@@ -286,7 +286,7 @@ static int fpc1020_request_named_gpio(struct fpc1020_data *fpc1020,
 	return 0;
 }
 
-#ifdef CONFIG_INPUT_MISC_FPC1020_SAVE_TO_CLASS_DEVICE
+#ifdef CONFIG_SENSORS_FPC_1020_SAVE_TO_CLASS_DEVICE
 #define MAX_INSTANCE	5
 #define MAJOR_BASE	32
 static int fpc1020_create_sysfs(struct fpc1020_data *fpc1020, bool create) {
@@ -382,7 +382,7 @@ static int fpc1020_probe(struct platform_device *pdev)
 	if (rc)
 		goto exit;
 
-#ifdef CONFIG_INPUT_MISC_FPC1020_SAVE_TO_CLASS_DEVICE
+#ifdef CONFIG_SENSORS_FPC_1020_SAVE_TO_CLASS_DEVICE
 	rc = fpc1020_create_sysfs(fpc1020, true);
 #else
 	rc = sysfs_create_group(&dev->kobj, &attribute_group);
@@ -413,7 +413,7 @@ static int fpc1020_probe(struct platform_device *pdev)
 	return 0;
 
 irq_exit:
-#ifdef CONFIG_INPUT_MISC_FPC1020_SAVE_TO_CLASS_DEVICE
+#ifdef CONFIG_SENSORS_FPC_1020_SAVE_TO_CLASS_DEVICE
 	fpc1020_create_sysfs(fpc1020, false);
 #else
 	sysfs_remove_group(&pdev->dev.kobj, &attribute_group);
@@ -426,7 +426,7 @@ static int fpc1020_remove(struct platform_device *pdev)
 {
 	struct  fpc1020_data *fpc1020 = dev_get_drvdata(&pdev->dev);
 
-#ifdef CONFIG_INPUT_MISC_FPC1020_SAVE_TO_CLASS_DEVICE
+#ifdef CONFIG_SENSORS_FPC_1020_SAVE_TO_CLASS_DEVICE
 	fpc1020_create_sysfs(fpc1020, false);
 #else
 	sysfs_remove_group(&pdev->dev.kobj, &attribute_group);

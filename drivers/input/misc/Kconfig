@@ -906,6 +906,14 @@ config SENSORS_FPC_1020
 	  Say Y here if you wish to include support for finger print sensor.
 	  If unsure, say N.
 
+config SENSORS_FPC_1020_SAVE_TO_CLASS_DEVICE
+	bool "Generate sysfs nodes"
+	default n
+	help
+	  Say Y here if you wish to include sysfs support for FPC1020 sensor driver.
+	  If unsure, say N.
+
+
 config INPUT_EGISTEC_FPS
 	tristate "Egistec FPS fingerprint sensor"
 	default n
