@@ -22,7 +22,12 @@ make ${DEVICE}_defconfig
 
 # Build the kernel!
 # Generate a log file for ez debugging and exit upon error.
-make &>build.log || (echo "Well well well, looks like something went wrong..."; exit 1)
+make || export NEEDSEXIT=1
+
+if [[ $NEEDSEXIT == "1" ]]; then
+echo "Well well well, looks like something went wrong..."
+exit 1
+fi
 
 # Obtain the goodness
 cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3${DEVICE}
