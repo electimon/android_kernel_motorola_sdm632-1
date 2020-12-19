@@ -127,3 +127,6 @@ Android.bp
 # Ignore build script stuff
 revision*
 build.log
+*revision
+AnyKernel3*
+out
