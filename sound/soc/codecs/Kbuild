@@ -56,7 +56,7 @@ else
 endif
 endif
 
-ifeq ($(CONFIG_OCEAN_DTB), y)
+ifeq ($(filter y,$(CONFIG_OCEAN_DTB),$(CONFIG_SURFNA_DTB)),)
 snd_soc_tfa9874-objs += tfa98xx.o
 snd_soc_tfa9874-objs += tfa_container.o
 snd_soc_tfa9874-objs += tfa_dsp.o

@@ -131,7 +131,7 @@ CDEFINES +=	-DANI_LITTLE_BYTE_ENDIAN \
 		-Werror\
 		-D__linux__
 
-ifeq ($(CONFIG_OCEAN_DTB), y)
+ifeq ($(filter y,$(CONFIG_OCEAN_DTB),$(CONFIG_SURFNA_DTB)),)
 CDEFINES += -DCONFIG_SND_SOC_NXP_TFA9874
 endif
 
