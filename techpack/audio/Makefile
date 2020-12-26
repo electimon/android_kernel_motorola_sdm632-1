@@ -11,7 +11,7 @@ ifeq ($(CONFIG_ARCH_SDXPOORWILLS), y)
 include $(srctree)/techpack/audio/config/sdxpoorwillsauto.conf
 export $(shell sed 's/=.*//' $(srctree)/techpack/audio/config/sdxpoorwillsauto.conf)
 endif
-ifeq ($(CONFIG_ARCH_SDM450), y)
+ifeq ($(CONFIG_MMI_DEVICE_DTBS), y)
 include $(srctree)/techpack/audio/config/sdm450auto.conf
 export $(shell sed 's/=.*//' $(srctree)/techpack/audio/config/sdm450auto.conf)
 endif
@@ -38,7 +38,7 @@ ifeq ($(CONFIG_ARCH_SDXPOORWILLS), y)
 LINUXINCLUDE    += \
                 -include $(srctree)/techpack/audio/config/sdxpoorwillsautoconf.h
 endif
-ifeq ($(CONFIG_ARCH_SDM450), y)
+ifeq ($(CONFIG_MMI_DEVICE_DTBS), y)
 LINUXINCLUDE    += \
                 -include $(srctree)/techpack/audio/config/sdm450autoconf.h
 endif
