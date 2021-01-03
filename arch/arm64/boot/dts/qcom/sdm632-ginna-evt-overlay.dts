@@ -15,6 +15,7 @@
 
 #include <dt-bindings/clock/msm-clocks-8953.h>
 
+#include "sdm632-camera-sensor-mot-ginna-evt-overlay.dtsi"
 #include "sdm632-ginna-common-overlay.dtsi"
 
 / {
