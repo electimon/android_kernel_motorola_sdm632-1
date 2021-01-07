@@ -691,8 +691,9 @@ static struct spi_driver cts_spi_driver = {
 #ifdef CONFIG_CTS_PM_GENERIC
 		   .pm = &cts_i2c_driver_pm_ops,
 #endif /* CONFIG_CTS_PM_GENERIC */
+		   .probe_type = PROBE_PREFER_ASYNCHRONOUS,
 
-		   },
+	},
 	.id_table = cts_device_id_table,
 };
 
