@@ -1120,6 +1120,7 @@ static struct i2c_driver tp_i2c_driver = {
 		   .name = DEVICE_ID,
 		   .owner = THIS_MODULE,
 		   .of_match_table = tp_match_table,
+		   .probe_type = PROBE_PREFER_ASYNCHRONOUS,
 		   },
 	.probe = ilitek_platform_probe,
 	.remove = ilitek_platform_remove,
