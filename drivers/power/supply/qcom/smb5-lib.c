@@ -5306,24 +5306,6 @@ void mmi_init(struct smb_charger *chg)
 	if (!chg)
 		return;
 
-	chg->ipc_log = ipc_log_context_create(QPNP_LOG_PAGES,
-						"charger", 0);
-	if (chg->ipc_log == NULL)
-		pr_err("%s: failed to create charger IPC log\n",
-						__func__);
-	else
-		smblib_dbg(chg, PR_MISC,
-			   "IPC logging is enabled for charger\n");
-
-	chg->ipc_log_reg = ipc_log_context_create(QPNP_LOG_PAGES,
-						"charger_reg", 0);
-	if (chg->ipc_log_reg == NULL)
-		pr_err("%s: failed to create register IPC log\n",
-						__func__);
-	else
-		smblib_dbg(chg, PR_MISC,
-			   "IPC logging is enabled for charger\n");
-
 	mmi_chip = chg;
 
 	chg->mmi.charger_rate = POWER_SUPPLY_CHARGE_RATE_NONE;
