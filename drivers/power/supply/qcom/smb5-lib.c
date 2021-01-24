@@ -5025,8 +5025,6 @@ static void mmi_heartbeat_work(struct work_struct *work)
 	} else if ((mmi->pres_temp_zone == ZONE_HOT) ||
 		   (mmi->pres_temp_zone == ZONE_COLD)) {
 		chip->mmi.pres_chrg_step = STEP_STOP;
-	} else if (mmi->demo_mode) {
-		mmi->pres_chrg_step = STEP_DEMO;
 	} else if ((mmi->pres_chrg_step == STEP_NONE) ||
 		   (mmi->pres_chrg_step == STEP_STOP)) {
 		if (zone->norm_mv && (batt_mv >= zone->norm_mv)) {
