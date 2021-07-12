@@ -56,7 +56,19 @@ else
 endif
 endif
 
-ifeq ($(filter y,$(CONFIG_OCEAN_DTB),$(CONFIG_SURFNA_DTB)),)
+ifeq ($(CONFIG_SURFNA_DTB), y)
+snd_soc_tfa9874-objs += tfa98xx.o
+snd_soc_tfa9874-objs += tfa_container.o
+snd_soc_tfa9874-objs += tfa_dsp.o
+snd_soc_tfa9874-objs += tfa_init.o
+ifdef TFA_DEBUG
+EXTRA_CFLAGS += -DTFA_DEBUG -DDEBUG
+snd_soc_tfa9874-objs += tfa_debug.o
+endif
+obj-y += snd_soc_tfa9874.o
+endif
+
+ifeq ($(CONFIG_OCEAN_DTB), y)
 snd_soc_tfa9874-objs += tfa98xx.o
 snd_soc_tfa9874-objs += tfa_container.o
 snd_soc_tfa9874-objs += tfa_dsp.o
